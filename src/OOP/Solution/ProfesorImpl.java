@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ProfesorImpl implements Profesor{
+public class ProfesorImpl implements Profesor {
     private int id;
     private String name;
     private Set<Profesor> friends;
@@ -29,8 +29,7 @@ public class ProfesorImpl implements Profesor{
 
     public Profesor favorite(CasaDeBurrito c)
             throws Profesor.UnratedFavoriteCasaDeBurritoException {
-        if (!c.isRatedBy(this))
-        {
+        if (!c.isRatedBy(this)) {
             throw new Profesor.UnratedFavoriteCasaDeBurritoException();
         }
         this.favorites.add(c);
@@ -44,12 +43,10 @@ public class ProfesorImpl implements Profesor{
 
     public Profesor addFriend(Profesor p)
             throws Profesor.SameProfesorException, Profesor.ConnectionAlreadyExistsException {
-        if (this.equals(p))
-        {
+        if (this.equals(p)) {
             throw new SameProfesorException();
         }
-        if (this.friends.contains(p))
-        {
+        if (this.friends.contains(p)) {
             throw new ConnectionAlreadyExistsException();
         }
         this.friends.add(p);
@@ -81,60 +78,67 @@ public class ProfesorImpl implements Profesor{
 
     public Collection<CasaDeBurrito> favoritesByRating(int rLimit) {
         return filterAndSortFavorites(
-                ((x,y) -> {
-                                    int diff = (int)(y.averageRating() - x.averageRating());
-                                    if (diff !=0) {
-                                        return diff;
-                                    }
-                                    diff = x.distance() - y.distance();
-                                    if (diff != 0)
-                                    {
-                                        return diff;
-                                    }
-                                    else{
-                                        return (x.getId()-y.getId());
-                                    }
+                ((x, y) -> {
+                    int diff = (int) (y.averageRating() - x.averageRating());
+                    if (diff != 0) {
+                        return diff;
+                    }
+                    diff = x.distance() - y.distance();
+                    if (diff != 0) {
+                        return diff;
+                    } else {
+                        return (x.getId() - y.getId());
+                    }
                 })
-        ,(rate -> rate.averageRating() >= rLimit));
+                , (rate -> rate.averageRating() >= rLimit));
     }
 
 
     public Collection<CasaDeBurrito> favoritesByDist(int dLimit) {
         return filterAndSortFavorites(
-                ((c1,c2)-> {
+                ((c1, c2) -> {
                     int diff = c1.distance() - c2.distance();
-                    if(diff != 0) {
+                    if (diff != 0) {
                         return diff;
                     }
                     diff = (int) (c2.averageRating() - c1.averageRating());
-                    if(diff != 0) {
+                    if (diff != 0) {
                         return diff;
                     }
                     return c1.getId() - c2.getId();
                 }),
                 (x -> x.distance() <= dLimit)
-                );
+        );
     }
 
 
-
     public String toString() {
-return "";
+        String str = "";
+        str += "Profesor: " + this.name + ".\n";
+        str += "Id: " + this.id + ".\n";
+        str += "Favorites: ";
+        String favorites_str = favorites.stream()
+                .sorted()
+                .map(x -> x.getName())
+                .toList()
+                .toString();
+        favorites_str = favorites_str.substring(1, favorites_str.length()-1);
+        str += favorites_str + ".";
+        return str;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if(obj.getClass() != this.getClass())
+        if (obj.getClass() != this.getClass())
             return false;
-        return this.getId() == ((Profesor)obj).getId();
+        return this.getId() == ((Profesor) obj).getId();
     }
 
     @Override
     public int compareTo(Profesor other) {
-        return this.getId()-other.getId();
+        return this.getId() - other.getId();
     }
 }
