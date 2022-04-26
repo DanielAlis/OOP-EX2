@@ -81,6 +81,8 @@ public class CartelDeNachosImpl implements CartelDeNachos {
         }
         profesors_graph.get(p1).add(p2);
         profesors_graph.get(p2).add(p1);
+        p1.addFriend(p2);
+        p2.addFriend(p1);
         return this;
     }
 
@@ -93,7 +95,7 @@ public class CartelDeNachosImpl implements CartelDeNachos {
         List<CasaDeBurrito> favorites = new LinkedList<>();
         for (Profesor friend : profesors_graph.get(p).stream().sorted().toList()) {
             favorites.addAll(
-                    friend.favoritesByRating(Integer.MAX_VALUE).stream()
+                    friend.favoritesByRating(0).stream()
                             .filter(x -> !favorites.contains(x)).toList()
             );
         }

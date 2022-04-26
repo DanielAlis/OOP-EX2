@@ -89,6 +89,11 @@ public class CasaDeBurritoImpl implements CasaDeBurrito {
     }
 
     @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
     public int compareTo(CasaDeBurrito other) {
         return this.getId() - other.getId();
     }

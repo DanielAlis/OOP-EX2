@@ -22,6 +22,7 @@ public class ProfesorImpl implements Profesor {
         this.friends = new HashSet<Profesor>();
         this.favorites = new HashSet<CasaDeBurrito>();
     }
+
     public int getId() {
         return this.id;
     }
@@ -136,7 +137,10 @@ public class ProfesorImpl implements Profesor {
             return false;
         return this.getId() == ((Profesor) obj).getId();
     }
-
+    @Override
+    public int hashCode() {
+        return id;
+    }
     @Override
     public int compareTo(Profesor other) {
         return this.getId() - other.getId();
